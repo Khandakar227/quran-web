@@ -1,16 +1,15 @@
 /* eslint-disable eqeqeq */
 import React, { Component } from 'react'
+import axios from 'axios';
 import firebase from "./FireBaseConfig"
 import "@firebase/database"
 import Navbar from './Navbar'
 import Setting from './Setting'
 import Ayah from './Ayah'
-import EnQ from './quran-file/en-sahih.json'
 import {RightOutlined, LeftOutlined} from '@ant-design/icons'
 import 'bootstrap/dist/css/bootstrap.css'
 import './App.css'
 import ErrorBoundary from './ErrorBoundary'
-let Surahs =EnQ.data.surahs
 let SurahSelection = []
 let AyahSelection=[]
 
@@ -25,19 +24,38 @@ class App extends Component {
       words: [],
       darkMode: localStorage.getItem('DarkMode')|| false,
       ShowTranslations: false,
-      Loading: true
+      Surahs: '',
+      Loading: true,
+      TranslatedQuran: '',
+      Edition:''
     }
   }
+  fetchData=()=>{
+    let url=this.state.Translation==1 ?`https://khandakar227.github.io/json-data/bengali-quran/`:
+    `https://khandakar227.github.io/json-data/en-sahih/`
+    axios.get(`${url}surahs/${this.state.SurahNum}.json`).then(res=>{
+      this.setState({TranslatedQuran:res.data})
+    })
+  }
+
+  fetchTranslation=()=>{
+    let url=this.state.Translation==1 ?`https://khandakar227.github.io/json-data/bengali-quran/`:
+    `https://khandakar227.github.io/json-data/en-sahih/`
+    axios.get(`${url}edition/edition.json`).then(res=>{
+      this.setState({Edition: res.data})
+      
+    })
+  }
   nextVerse = ()=>{
-    if(this.state.AyahNum < Surahs[this.state.SurahNum-1].ayahs.length){
+    if(this.state.AyahNum < this.state.Surahs[this.state.SurahNum-1].numberOfAyahs){
       this.setState({ AyahNum: this.state.AyahNum+1})
-   } else if(this.state.AyahNum >= Surahs[this.state.SurahNum-1].ayahs.length){
+   } else if(this.state.AyahNum >= this.state.Surahs[this.state.SurahNum-1].numberOfAyahs){
     this.setState({ AyahNum: 1, SurahNum:this.state.SurahNum!==114 ? this.state.SurahNum+1 : 114})
     }
     
   }
   prevVerse = ()=>{
-    if(this.state.AyahNum < Surahs[this.state.SurahNum-1].ayahs.length && this.state.AyahNum !== 1){
+    if(this.state.AyahNum < this.state.Surahs[this.state.SurahNum-1].numberOfAyahs && this.state.AyahNum !== 1){
       this.setState({ AyahNum: this.state.AyahNum-1})
    } else if(this.state.AyahNum === 1){
     if(this.state.SurahNum<=1) this.setState({SurahNum:1})
@@ -73,12 +91,15 @@ setEN=()=>{this.setState({Translation: 0})}
 
   async componentDidMount(){
     this.state.darkMode ==='true' ? this.setState({darkMode: true})  : this.setState({darkMode: false})
-    let db = firebase.database().ref(`/${this.state.SurahNum}`).child(this.state.AyahNum)
-    Surahs.map((Surah,i)=>{
-      SurahSelection.push(<option key={i+1} value={i+1}>{`${Surah.number}. ${Surah.englishName} (${Surah.englishNameTranslation})`}</option>)
-      return SurahSelection
+    await axios.get(`https://khandakar227.github.io/json-data/metadata/metadata.json`).then(res=>{
+      this.setState({Surahs: res.data})
     })
-    for (let i=1; i<=Surahs[this.state.SurahNum-1].ayahs.length; i++){
+    let db = firebase.database().ref(`/${this.state.SurahNum}`).child(this.state.AyahNum)
+
+    this.fetchData()
+    this.fetchTranslation()
+
+    for (let i=1; i<=this.state.Surahs[this.state.SurahNum-1].numberOfAyahs; i++){
       AyahSelection.push( <option key={i} value={i}>{i}</option>) 
       }
     db.once('value', snap => {
@@ -86,16 +107,23 @@ setEN=()=>{this.setState({Translation: 0})}
       this.setState({words: words})
       this.setState({Loading: false})
     })
+    this.state.Surahs.map((Surah,i)=>{
+      SurahSelection.push(<option key={i+1} value={i+1}>{`${Surah.number}. ${Surah.englishName} (${Surah.englishNameTranslation})`}</option>)
+      return SurahSelection
+    })
+
     document.body.addEventListener('keydown', this.handleKeyDown);
   }
 
    componentDidUpdate(prevProps,prevState){
     localStorage.setItem('TanslateTo', this.state.Translation)
-    if(this.state.SurahNum!==prevState.SurahNum || this.state.AyahNum!==prevState.AyahNum){
+    if(this.state.SurahNum!==prevState.SurahNum || this.state.AyahNum!==prevState.AyahNum||this.state.Translation!==prevState.Translation){
       localStorage.setItem('SurahNumber', this.state.SurahNum)
       localStorage.setItem('VerseNumber', this.state.AyahNum)
       localStorage.setItem('TanslateTo', this.state.Translation)
       this.setState({Loading: true})
+      this.fetchTranslation()
+      this.fetchData()
       let db = firebase.database().ref(`/${this.state.SurahNum}`).child(this.state.AyahNum)
       db.once('value', snap => {
         let words = snap.val().words
@@ -104,7 +132,7 @@ setEN=()=>{this.setState({Translation: 0})}
       })
       if(this.state.SurahNum!==prevState.SurahNum){
         AyahSelection=[];
-          for (let i=1; i<=Surahs[this.state.SurahNum-1].ayahs.length; i++){
+          for (let i=1; i<=this.state.Surahs[this.state.SurahNum-1].numberOfAyahs; i++){
           AyahSelection.push( <option key={i} value={i}>{i}</option>) 
           }}
     }
@@ -133,9 +161,9 @@ setEN=()=>{this.setState({Translation: 0})}
        <p style={{top:'25%', left:'0',right:'0',fontWeight:'bold', display: this.state.Loading? 'block':'none'}} className="position-absolute text-center text-danger">
          <span className="spinner-grow text-danger"></span> Loading...<br/> If loading is taking too long try refreshing again.</p>
 
-       <Ayah words={this.state.words} SurahNum={this.state.SurahNum} AyahNum={this.state.AyahNum}
-       Translation={this.state.Translation}
-       />
+       {this.state.TranslatedQuran&&this.state.Edition?<Ayah words={this.state.words} SurahNum={this.state.SurahNum} AyahNum={this.state.AyahNum}
+       TranslatedQuran={this.state.TranslatedQuran} Translation={this.state.Edition}
+       />: 'Loading'}
 
         <div className="text-center mt-3">
                 <span className="mx-2">Verse:</span>
@@ -155,13 +183,13 @@ setEN=()=>{this.setState({Translation: 0})}
                   {SurahSelection?SurahSelection:null}
                 </select>
         </div>
-     <span onClick={()=>this.nextVerse()}
-              className="position-fixed next pb-2"><RightOutlined /></span>
-        <span onClick={()=>this.prevVerse()}
-              className="position-fixed prev pb-2"><LeftOutlined /></span>
        </div>
        </div>
        <Setting onClick={()=>this.filterMode()} keyFunction={this.handleKeyDown}/>
+     <span onClick={()=>this.nextVerse()} style={{filter: this.state.darkMode? 'invert(1)': 'unset'}}
+              className="position-fixed next pb-2"><RightOutlined /></span>
+        <span onClick={()=>this.prevVerse()} style={{filter: this.state.darkMode? 'invert(1)': 'unset'}}
+              className="position-fixed prev pb-2"><LeftOutlined /></span>
       </>
     )
   }

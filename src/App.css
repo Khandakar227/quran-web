@@ -2,7 +2,7 @@
 html{height: 100%;}
 body ,#root{height: 100%;background: rgb(58, 55, 55);}
 .arabic{
-  font-size: 1.7rem;direction: rtl;
+  font-size: 1.7rem;
 }
 .DejaVu{font-family:"DejaVu Sans", serif!important;}
 .monospace{font-family: monospace!important;}
@@ -136,7 +136,7 @@ body ,#root{height: 100%;background: rgb(58, 55, 55);}
 }
 @media screen and (max-width:650px) {
   .next, .prev{
-  top: 65%;
+  top: 55%;
   background-color: rgba(255, 0, 0, 0.3);
 }
 }
@@ -155,5 +155,8 @@ body ,#root{height: 100%;background: rgb(58, 55, 55);}
   }
   #AllSettings{
     min-width: 120px;
+  }
+  .credit-section{
+    font-size: 1.2rem;
   }
 }
