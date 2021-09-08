@@ -1,6 +1,8 @@
-# A Web application for the glorious quran built with react js.
+# A Web application for the glorious quran built with **Svelte**.
 <hr/>
 ## Developed by me.
 <hr/>
-database was collected from <a href="https://alquran.cloud/api">Alquran Cloud API</a>
-and <a href="https://quranwbw.com">QuranWBW</a>
+
+database was collected from [Alquran Cloud API](https://alquran.cloud/api)
+and [lQuranWBW](https://quranwbw.com)
+
