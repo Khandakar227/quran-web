@@ -1,0 +1,143 @@
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+* {
+  color: inherit;
+  --light: #fff;
+  --primary: #a33b20;
+  --alpha: #5a352a;
+  --bg-light: #e7e9eb;
+}
+body {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  background-color: #3a3737;
+}
+
+label {
+  display: block;
+}
+
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  -webkit-padding: 0.4em 0;
+  padding: 0.4em;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+input:disabled {
+  color: #ccc;
+}
+
+button:disabled {
+  color: #999;
+}
+
+button:not(:disabled):active {
+  background-color: #ddd;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus {
+  border-color: #666;
+}
+.m0 {
+  margin: 0;
+}
+.my1 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.my2 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.mx2 {
+  margin: 0 1rem;
+}
+.mb1 {
+  margin-bottom: 0.5rem;
+}
+.p0 {
+  padding: 0;
+}
+.p1 {
+  padding: 0.5rem;
+}
+.p2 {
+  padding: 1rem;
+}
+.p3 {
+  padding: 1.5rem;
+}
+.py3 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+.py2 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.py1 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.px3 {
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+}
+.px2 {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+.px1 {
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+}
+.text-center {
+  text-align: center;
+}
+
+.jumbotron {
+  padding: 2rem 1rem;
+  margin-bottom: 2rem;
+  background-color: #e9ecef;
+  border-radius: 0.3rem;
+}
+.position-relative {
+  position: relative;
+}
+.active {
+  background-color: var(--primary);
+  color: var(--light) !important;
+}
+
+.focus_btn {
+  display: none;
+}
+
+.focus_container:focus-within .focus_btn {
+  display: block;
+}
+.border-bottom {
+	border-bottom: 1px solid black;
+} 
+@media (min-width: 576px) {
+  .jumbotron {
+    padding: 4rem 2rem;
+  }
+}
