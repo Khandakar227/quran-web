@@ -1,3 +1,7 @@
+@font-face {
+  font-family: Uthmani-Hafs;
+  src: url(./fonts/Uthmani-Hafs.woff2);
+}
 html,
 body {
   position: relative;

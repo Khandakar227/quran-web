@@ -28,7 +28,7 @@
   }
   .arabic {
     direction: rtl;
-    font-size: 1.5rem;
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
     line-height: 1.5;
   }
   .translated,

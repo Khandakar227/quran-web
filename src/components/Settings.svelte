@@ -7,7 +7,7 @@
   export let className = null;
 
   const arabicFont = [
-    "Hamarathan", "IBM Plex Sans Arabic", "Markazi Text"
+    "Hamarathan", "IBM Plex Sans Arabic", "Markazi Text", "Uthmani-Hafs"
   ]
   function changeFont(e) {
     ArabicFont.set(e.target.value);

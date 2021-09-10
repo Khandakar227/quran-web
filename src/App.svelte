@@ -52,11 +52,17 @@
   class="text-center py1 m0 heading mb1"
   style="filter: hue-rotate({$Theme}deg);"
 >
-  <h1 lang="ar" class="ar py1 m0">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</h1>
-  <p lang="en">
-    Starting with the Name of Allah who is the most merciful and the most
-    beneficial
-  </p>
+  <h1 lang="ar" class="ar m0" style="font-family: 'Uthmani-Hafs';">
+    بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
+  </h1>
+  {#if $TranslateTo == 0}
+    <p lang="en">
+      Starting with the Name of Allah who is the most merciful and the most
+      beneficial
+    </p>
+  {:else}
+    <p lang="bn">শুরু করছি আল্লাহর নামে যিনি পরম করুণাময়, অতি দয়ালু।</p>
+  {/if}
 </div>
 
 <Settings />
